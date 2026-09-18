@@ -1,18 +1,15 @@
 import sqlite3
+import os
 
 def conectar_banco():
-    # ERRO DE SEGURANÇA 1 (SAST): Credencial exposta no código.
-    # O SAST vai detectar a palavra 'password' recebendo uma string fixa.
-    db_password = "super_senha_secreta_123"
-    print(f"Conectando ao banco de forma insegura com a senha: {db_password}") #mera simulação
+    # CORRETO: Buscando de variável de ambiente, nunca no código
+    senha_banco = os.getenv("DB_PASSWORD", "senha_padrao_local")
+    print("Conexão estabelecida de forma segura.")
 
 def buscar_usuario(nome_usuario):
-    # ERRO DE SEGURANÇA 2 (SAST): Risco crítico de SQL Injection.
+    # CORRETO: Uso de parâmetros (?) para evitar SQL Injection
     conn = sqlite3.connect('banco_exemplo.db')
     cursor = conn.cursor()
-    query = "SELECT * FROM usuarios WHERE nome = '" + nome_usuario + "'"
-    cursor.execute(query)
+    query = "SELECT * FROM usuarios WHERE nome = ?"
+    cursor.execute(query, (nome_usuario,))
     return cursor.fetchall()
-
-if __name__ == "__main__":
-    conectar_banco()
