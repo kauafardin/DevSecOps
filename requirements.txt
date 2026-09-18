@@ -1,1 +1,2 @@
-urllib3==1.25.10
+# Atualizado para uma versão segura
+urllib3>=1.26.18
